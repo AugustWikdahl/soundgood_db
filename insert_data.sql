@@ -52,7 +52,7 @@ INSERT INTO "Student_ContactPerson" ("student_id", "contactPerson_id") VALUES
 (4, 4),
 (5, 5);
 
-INSERT INTO "Student_Siblings" ("student1_id", "student2_id") VALUES (1, 2);
+INSERT INTO "Student_Siblings" ("student1_id", "student2_id") VALUES (1,3), (2,3), (4,5),(1, 2);
 
 INSERT INTO "InstrumentsTaught" ("instructor_id" , "instrumentType_id", "skillLevel") VALUES (1, 1, 'advanced'), 
 (1, 2, 'advanced'),
