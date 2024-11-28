@@ -89,17 +89,24 @@ INSERT INTO "IndividualLesson" ("id", "date", "time", "instrument", "student_id"
 (4, '2024-11-21', '2024-11-21 13:00:00', 'guitar', 4, 2, 'beginner', 1);
 
 INSERT INTO "EnsembleLesson" ("id", "date", "time", "maximumStudents", "minimumStudents", "genre", "instructor_id", "skillLevel", "price_id") VALUES 
-(1, '2024-11-21', '2024-11-21 10:00:00', 10, 3, 'pop', 1, 'beginner', 1),
-(2, '2024-11-22', '2024-11-22 10:00:00', 10, 3, 'pop', 1, 'beginner', 1),
-(3, '2024-11-23', '2024-11-23 10:00:00', 10, 3, 'pop', 1, 'beginner', 1),
-(4, '2024-11-24', '2024-11-24 10:00:00', 10, 3, 'pop', 1, 'beginner', 1);
+(9, '2024-11-24', '2024-11-24 10:00:00', 5, 3, 'jazz', 1, 'beginner', 1),
+(8, '2024-11-24', '2024-11-24 10:00:00', 5, 3, 'rock', 1, 'beginner', 1),
+(7, '2024-12-20', '2024-11-20 10:00:00', 5, 3, 'rock', 1, 'beginner', 1),
+(6, '2024-11-26', '2024-11-26 10:00:00', 5, 3, 'pop', 1, 'beginner', 1),
+(5, '2024-11-25', '2024-11-25 10:00:00', 5, 3, 'pop', 1, 'beginner', 1),
+(1, '2024-11-21', '2024-11-21 10:00:00', 5, 3, 'pop', 1, 'beginner', 1),
+(2, '2024-11-22', '2024-11-22 10:00:00', 5, 3, 'pop', 1, 'beginner', 1),
+(3, '2024-11-23', '2024-11-23 10:00:00', 5, 3, 'pop', 1, 'beginner', 1),
+(4, '2024-11-24', '2024-11-24 10:00:00', 5, 3, 'pop', 1, 'beginner', 1);
 
 
 INSERT INTO "GroupLesson" ("id", "date", "time", "instrument", "maximumStudents", "minimumStudents", "instructor_id", "skillLevel", "price_id") VALUES 
+(5, '2024-11-24', '2024-11-24 10:00:00', 'guitar', 10, 3, 1, 'beginner', 1),
 (1, '2024-11-21', '2024-11-21 10:00:00', 'guitar', 10, 3, 1, 'beginner', 1),
 (2, '2024-11-22', '2024-11-22 10:00:00', 'guitar', 10, 3, 1, 'beginner', 1),
 (3, '2024-11-23', '2024-11-23 10:00:00', 'guitar', 10, 3, 1, 'beginner', 1),
 (4, '2024-11-24', '2024-11-24 10:00:00', 'guitar', 10, 3, 1, 'beginner', 1);
+
 
 INSERT INTO "Student_EnsembleLesson" ("student_id", "ensembleLesson_id") VALUES 
 (1, 1),
@@ -114,7 +121,9 @@ INSERT INTO "Student_EnsembleLesson" ("student_id", "ensembleLesson_id") VALUES
 (3, 3),
 (1, 4),
 (2, 4),
-(3, 4);
+(3, 4),
+(4, 1),
+(5, 1);
 
 
 INSERT INTO "Student_GroupLesson" ("student_id", "groupLesson_id") VALUES 
