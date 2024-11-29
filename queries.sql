@@ -126,6 +126,8 @@ FROM lessons_given_by_instructors
 WHERE Month = '11' and NoOfLessons > 2 -- You can change the month and amount of lessons here
 ORDER BY NoOfLessons DESC;
 
+
+
 --View to get ensemble lessons
 CREATE OR REPLACE VIEW ensemble_lessons_by_day AS
 SELECT
@@ -153,8 +155,17 @@ FROM
     ) as t ON e.id = t.id
 ORDER BY EXTRACT(ISODOW from date), genre;
 
+
 --Query to view next weeks ensemble lessons from a specific date
 SELECT *
+FROM ensemble_lessons_by_day as e
+WHERE e.date >= DATE_TRUNC('week', DATE '2024-11-11') + INTERVAL '1 week' --Date_TRUNC('week') select the monday of that week
+    AND e.date < DATE_TRUNC('week', DATE '2024-11-11') + INTERVAL '2 weeks';
+
+
+--Analyze that query
+VACUUM ANALYZE;
+EXPLAIN SELECT *
 FROM ensemble_lessons_by_day as e
 WHERE e.date >= DATE_TRUNC('week', DATE '2024-11-11') + INTERVAL '1 week' --Date_TRUNC('week') select the monday of that week
     AND e.date < DATE_TRUNC('week', DATE '2024-11-11') + INTERVAL '2 weeks';

@@ -1,4 +1,14 @@
+\c soundgood;
 set search_path to soundgood_dump,public;
+
+-- Clear data from all related tables before inserting new data
+TRUNCATE "ContactPerson", "SiblingDiscountRules", "Student", "Instructor", 
+         "InstrumentType", "Instrument", "LeaseRules", "InstrumentLease", 
+         "Student_ContactPerson", "Student_Siblings", "InstrumentsTaught", 
+         "EnsemblesTaught", "Availability", "IndividualLessonPrice", 
+         "GroupLessonPrice", "EnsembleLessonPrice", "IndividualLesson", 
+         "EnsembleLesson", "GroupLesson", "Student_EnsembleLesson", 
+         "Student_GroupLesson" RESTART IDENTITY CASCADE;
 
 INSERT INTO "ContactPerson" ("id","name","personNumber","phoneNumber","adress","email") VALUES
  (1,'Hakeem Gamble','462162342081','1-307-451-2258','486-1874 Mauris, Rd.','consectetuer.adipiscing.elit@google.org'),
@@ -68,17 +78,17 @@ INSERT INTO "Availability" ("instructor_id" , "date", "time") VALUES (1, '2024-1
 (1, '2024-11-22', '2024-11-22 10:00:00'),
 (1, '2024-11-23', '2024-11-23 15:00:00');
 
-INSERT INTO "IndividualLessonPrice" ("id", "skillLevel", "dateUpdated", "price") VALUES (1, 'beginner', '2024-11-21', 100.0),
+INSERT INTO "IndividualLessonPrice" ("id", "skillLevel", "dateUpdated", "price") VALUES (1, 'beginner', '2024-11-21', 150.0),
 (2, 'intermediate', '2024-11-21', 150.0),
 (3, 'advanced', '2024-11-21', 200.0);
 
 INSERT INTO "GroupLessonPrice" ("id", "skillLevel", "dateUpdated", "price") VALUES
-(1, 'beginner', '2024-11-21', 100.0),
+(1, 'beginner', '2024-11-21', 160.0),
 (2, 'intermediate', '2024-11-21', 150.0),
 (3, 'advanced', '2024-11-21', 200.0);
 
 INSERT INTO "EnsembleLessonPrice" ("id", "skillLevel", "dateUpdated", "price") VALUES
-(1, 'beginner', '2024-11-21', 100.0),
+(1, 'beginner', '2024-11-21', 180.0),
 (2, 'intermediate', '2024-11-21', 150.0),
 (3, 'advanced', '2024-11-21', 200.0);
 
