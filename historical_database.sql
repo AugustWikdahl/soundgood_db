@@ -1,4 +1,5 @@
 -- Create database
+DROP DATABASE historicaldb;
 CREATE DATABASE historicaldb;
 
 -- Connect to HistoricalDB

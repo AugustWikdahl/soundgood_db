@@ -10,12 +10,12 @@ SELECT
     s.name AS student_name, 
     s.email AS student_email
 FROM 
-    "IndividualLesson" il
+    "individual_lesson" il
 JOIN 
-    "IndividualLessonPrice" ilp 
-    ON il.price_id = ilp.id AND il."skillLevel" = ilp."skillLevel"
+    "individual_lesson_price" ilp 
+    ON il.price_id = ilp.id AND il.skill_level = ilp.skill_level
 JOIN 
-    "Student" s 
+    "student" s 
     ON il.student_id = s.id;
 
 -- Export data for group lessons to a temporary table
@@ -29,16 +29,16 @@ SELECT
     s.name AS student_name, 
     s.email AS student_email
 FROM 
-    "GroupLesson" gl
+    "group_lesson" gl
 JOIN 
-    "Student_GroupLesson" sgl 
-    ON gl.id = sgl."groupLesson_id"
+    "student_group_lesson" sgl 
+    ON gl.id = sgl.group_lesson_id
 JOIN 
-    "Student" s 
+    "student" s 
     ON sgl.student_id = s.id
 JOIN 
-    "GroupLessonPrice" glp 
-    ON gl.price_id = glp.id AND gl."skillLevel" = glp."skillLevel";
+    "group_lesson_price" glp 
+    ON gl.price_id = glp.id AND gl.skill_level = glp.skill_level;
 
 -- Export data for ensemble lessons to a temporary table
 CREATE TEMP TABLE temp_ensemble_lessons AS
@@ -51,16 +51,16 @@ SELECT
     s.name AS student_name, 
     s.email AS student_email
 FROM 
-    "EnsembleLesson" el
+    "ensemble_lesson" el
 JOIN 
-    "Student_EnsembleLesson" sel 
-    ON el.id = sel."ensembleLesson_id"
+    "student_ensemble_lesson" sel 
+    ON el.id = sel.ensemble_lesson_id
 JOIN 
-    "Student" s 
+    "student" s 
     ON sel.student_id = s.id
 JOIN 
-    "EnsembleLessonPrice" elp 
-    ON el.price_id = elp.id AND el."skillLevel" = elp."skillLevel";
+    "ensemble_lesson_price" elp 
+    ON el.price_id = elp.id AND el.skill_level = elp.skill_level;
 
 -- Combine individual, group, and ensemble lessons into a single temporary table
 CREATE TEMP TABLE temp_combined_lessons AS
