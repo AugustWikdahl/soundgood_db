@@ -20,21 +20,27 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
- 
-import main.integration.SoundgoodDAO;
-import main.integration.DBException;
 
+package main.integration;
 
- public class Controller {
-     private final SoundgoodDAO soundgoodDb;
- 
-     /**
-      * Creates a new instance, and retrieves a connection to the database.
-      * 
-      * @throws BankDBException If unable to connect to the database.
-      */
-     public Controller() throws DBException {
-         soundgoodDb = new SoundgoodDAO();
-     }
- 
- }
+public class DBException extends Exception {
+
+    /**
+     * Create a new instance thrown because of the specified reason.
+     *
+     * @param reason Why the exception was thrown.
+     */
+    public DBException(String reason) {
+        super(reason);
+    }
+
+    /**
+     * Create a new instance thrown because of the specified reason and exception.
+     *
+     * @param reason    Why the exception was thrown.
+     * @param rootCause The exception that caused this exception to be thrown.
+     */
+    public DBException(String reason, Throwable rootCause) {
+        super(reason, rootCause);
+    }
+}
