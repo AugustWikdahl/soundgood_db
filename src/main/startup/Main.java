@@ -3,9 +3,8 @@ package main.startup;
 import main.integration.SoundgoodDAO;
 
 public class Main {
-    SoundgoodDAO soundgoodDAO = new SoundgoodDAO();
     public static void main(String[] args) {
+        SoundgoodDAO soundgoodDAO = new SoundgoodDAO();
         System.out.println("Program started!");
-        Main main = new Main();
     }
 }

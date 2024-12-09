@@ -16,6 +16,7 @@ public class SoundgoodDAO {
         try {
             connectToSoundgoodDB();
         } catch (ClassNotFoundException | SQLException exception) {
+            System.out.println("failed");
             //throw new DBException("Could not connect to datasource.", exception);
         }
     }
