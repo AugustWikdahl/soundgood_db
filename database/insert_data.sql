@@ -34,25 +34,67 @@ VALUES (1,'Zorita Bell','247418879353','(654) 343-1470','854-1440 Ut, Rd.','nibh
  (4,'Mason Wyatt','314235638242','(650) 563-7579','P.O. Box 759, 362 Elementum, Rd.','odio.aliquam@protonmail.org'),
  (5,'Ezra Freeman','486037249470','1-424-227-8340','P.O. Box 478, 3728 In Rd.','vitae@yahoo.org');
 
-INSERT INTO "instrument_type" ("id","quantity","rental_price")
-VALUES (1,2,10.0),
- (2,3,10.0);
+INSERT INTO "instrument_type" ("id","quantity","name")
+VALUES (1,10,'guitar'),
+ (2,10,'base'),
+ (3,10,'saxophone'),
+ (4,10,'violin');
 
-INSERT INTO "instrument" ("id","instrument_type_id")
-VALUES (1,1),
-(2,1),
-(3,2),
-(4,2),
-(5,2);
+INSERT INTO "instrument" ("id","instrument_type_id", "rental_price", "brand")
+VALUES (1,1, 100.0, 'gibson'),
+(2,1, 100.0, 'gibson'),
+(3,1, 100.0, 'gibson'),
+(4,1, 100.0, 'gibson'),
+(5,1, 100.0, 'gibson'),
+(6,1, 100.0, 'gibson'),
+(7,1, 100.0, 'gibson'),
+(8,1, 100.0, 'gibson'),
+(9,1, 100.0, 'gibson'),
+(10,1, 100.0, 'gibson'),
+(11,2, 120.0, 'yamaha'),
+(12,2, 120.0, 'yamaha'),
+(13,2, 120.0, 'yamaha'),
+(14,2, 120.0, 'yamaha'),
+(15,2, 120.0, 'yamaha'),
+(16,2, 120.0, 'yamaha'),
+(17,2, 120.0, 'yamaha'),
+(18,2, 120.0, 'yamaha'),
+(19,2, 120.0, 'yamaha'),
+(20,2, 120.0, 'yamaha'),
+(21,3, 135.0, 'selmer'),
+(22,3, 135.0, 'selmer'),
+(23,3, 135.0, 'selmer'),
+(24,3, 135.0, 'selmer'),
+(25,3, 135.0, 'selmer'),
+(26,3, 135.0, 'selmer'),
+(27,3, 135.0, 'selmer'),
+(28,3, 135.0, 'selmer'),
+(29,3, 135.0, 'selmer'),
+(30,3, 135.0, 'selmer'),
+(31,4, 140.0, 'cecilio'),
+(32,4, 140.0, 'cecilio'),
+(33,4, 140.0, 'cecilio'),
+(34,4, 140.0, 'cecilio'),
+(35,4, 140.0, 'cecilio'),
+(36,4, 140.0, 'cecilio'),
+(37,4, 140.0, 'cecilio'),
+(38,4, 140.0, 'cecilio'),
+(39,4, 140.0, 'cecilio'),
+(40,4, 140.0, 'cecilio');
+
 
 INSERT INTO "lease_rules" ("id","max_lease_per_student","max_lease_duration","date_updated")
 VALUES (1,2, '12 months', '2024-11-21');
 
-INSERT INTO "instrument_lease" ("student_id", "instrument_id", "start_date", "lease_rules") VALUES 
-(1, 1, '2024-11-21', 1),
-(1, 2, '2024-11-21', 1),
-(2, 3, '2024-11-21', 1),
-(2, 4, '2024-11-21', 1);
+INSERT INTO "instrument_lease" ("student_id", "instrument_id", "start_date", "lease_rules", "is_terminated") VALUES 
+(1, 1, '2024-11-21', 1, FALSE),
+(1, 2, '2024-11-21', 1, FALSE),
+(2, 3, '2024-11-21', 1, FALSE),
+(2, 4, '2024-11-21', 1, FALSE),
+(3, 20, '2024-11-22', 1, FALSE),
+(3, 30, '2024-11-22', 1, FALSE),
+(4, 40, '2024-11-23', 1, FALSE);
+
 
 INSERT INTO "student_contact_person" ("student_id", "contact_person_id") VALUES 
 (1, 1),
