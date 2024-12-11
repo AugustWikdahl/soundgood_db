@@ -125,7 +125,7 @@ public class SoundgoodDAO {
      */
     public StudentDTO findStudentById(String studentId) throws DBException{
         String failureMsg = "Failed to get all students";
-        StudentDTO student;
+        StudentDTO student = null;
         ResultSet result = null;
         try {
             findStudentByIdStmt.setString(1, studentId);
