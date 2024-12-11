@@ -1,6 +1,7 @@
 package main.integration;
 
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -54,7 +55,7 @@ public class SoundgoodDAO {
 
     private void connectToSoundgoodDB() throws ClassNotFoundException, SQLException {
         connection = DriverManager.getConnection("jdbc:postgresql://localhost:5432/soundgood",
-                "postgres", "!Kaninjakt1975");
+                "postgres", "Hjrntvtt97");
 
         connection.setAutoCommit(false);
     }
@@ -122,15 +123,15 @@ public class SoundgoodDAO {
      * @param
      * @return a list of all students in the database
      */
-    public List<StudentDTO> findStudentById(String studentId) throws DBException{
+    public StudentDTO findStudentById(String studentId) throws DBException{
         String failureMsg = "Failed to get all students";
-        List<StudentDTO> students = new ArrayList<>();
+        StudentDTO student;
         ResultSet result = null;
         try {
             findStudentByIdStmt.setString(1, studentId);
             result = findStudentByIdStmt.executeQuery();
             while (result.next()) {
-                students.add(new StudentDTO(
+                student = (new StudentDTO(
                     result.getString(STUDENT_NAME_COLUMN_NAME),
                     result.getInt(STUDENT_PK_COLUMN_NAME), 
                     result.getInt("lease_count")
@@ -142,7 +143,7 @@ public class SoundgoodDAO {
         } finally {
             closeResultSet(failureMsg, result);
         }
-        return students;
+        return student;
     }  
 
     public void rentInstrument(int studentId, int instrumentId) throws DBException {
@@ -151,7 +152,7 @@ public class SoundgoodDAO {
         try {
             rentInstrumentStmt.setInt(1, studentId);
             rentInstrumentStmt.setInt(2, instrumentId);
-            rentInstrumentStmt.setString(3, LocalDate.now().toString());
+            rentInstrumentStmt.setDate(3, Date.valueOf(LocalDate.now()));
             rentInstrumentStmt.setInt(4, 1);
             rentInstrumentStmt.setBoolean(5, false);
             updatedRows = rentInstrumentStmt.executeUpdate();

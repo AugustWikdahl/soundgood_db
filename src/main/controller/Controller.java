@@ -1,10 +1,8 @@
 package main.controller;
 
-import main.integration.SoundgoodDAO;
-
 import java.util.List;
-
 import main.integration.DBException;
+import main.integration.SoundgoodDAO;
 import main.model.Instrument;
 
 public class Controller {
@@ -24,7 +22,7 @@ public class Controller {
     }
 
     // TODO:
-    public void rentInstrument (String studentId, String instrumentId) {
+    public void rentInstrument (String studentId, String instrumentId) throws DBException{
         soundgoodDb.rentInstrument(Integer.parseInt(studentId), Integer.parseInt(instrumentId));
     }
 
