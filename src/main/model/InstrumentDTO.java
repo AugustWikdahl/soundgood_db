@@ -20,4 +20,11 @@ public interface InstrumentDTO {
      * @return The instrument brand.
      */
     public String getBrand();
+
+    /**
+     * @return Instrument availability.
+     */
+    public boolean isAvailable();
+    
+    
 }

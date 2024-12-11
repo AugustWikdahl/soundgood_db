@@ -35,6 +35,7 @@ public class SoundgoodDAO {
     private PreparedStatement findAllInstrumentsStmt;
     private PreparedStatement findStudentByIdStmt;
     private PreparedStatement rentInstrumentStmt;
+    private PreparedStatement findInstrumentByIDStmt;
     private PreparedStatement terminateRentalStmt;
 
 
@@ -56,7 +57,7 @@ public class SoundgoodDAO {
 
     private void connectToSoundgoodDB() throws ClassNotFoundException, SQLException {
         connection = DriverManager.getConnection("jdbc:postgresql://localhost:5432/soundgood",
-                "postgres", "!Kaninjakt1975");
+                "postgres", "Hjrntvtt97");
 
         connection.setAutoCommit(false);
     }
@@ -123,8 +124,8 @@ public class SoundgoodDAO {
 
 
     /*
-     * @param
-     * @return a list of all students in the database
+     * @param int studentId, the id to search student by
+     * @return a studentDTO from the database
      */
     public StudentDTO findStudentById(int studentId) throws DBException{
         String failureMsg = "Failed to get student with id: " + studentId;
@@ -148,6 +149,25 @@ public class SoundgoodDAO {
         }
         return student;
     }  
+
+    public Instrument isInstrumentAvailable(int instrumentId) throws DBException{
+        String failureMsg = "Failed to find instrument by id: " + instrumentId;
+        Instrument instrument = null;
+        ResultSet result = null;
+        try {
+            findInstrumentByIDStmt.setInt(1, instrumentId);
+            result = findInstrumentByIDStmt.executeQuery();
+            if (result.next()) {
+                instrument = new Instrument(instrumentId, result.getBoolean("is_available"));
+            }
+            connection.commit();
+        } catch (SQLException sqle) {
+            handleException(failureMsg, sqle);
+        } finally {
+            closeResultSet(failureMsg, result);
+        }
+        return instrument;
+    }
 
     public void rentInstrument(int studentId, int instrumentId) throws DBException {
         String failureMsg = "Failed to rent specified instrument for student";
@@ -195,7 +215,12 @@ public class SoundgoodDAO {
         rentInstrumentStmt = connection.prepareStatement("INSERT INTO " + LEASE_TABLE_NAME + "(" + LEASE_STUDENT_FK_NAME + ", " + 
             LEASE_INSTRUMENT_FK_NAME + ", start_date, lease_rules, " + LEASE_TERMINATED_COLUMN_NAME + ") VALUES (?, ?, ?, ?, ?)");
 
-       
+        findInstrumentByIDStmt = connection.prepareStatement("SELECT i." + INSTRUMENT_PK_COLUMN_NAME + 
+            ", CASE WHEN il." + LEASE_INSTRUMENT_FK_NAME + " IS NULL OR il." + LEASE_TERMINATED_COLUMN_NAME
+            + " =  TRUE THEN TRUE ELSE FALSE END AS is_available FROM " + INSTRUMENT_TABLE_NAME + 
+            " AS i LEFT JOIN " + LEASE_TABLE_NAME + " AS il ON i." + INSTRUMENT_PK_COLUMN_NAME + " = il." 
+            + LEASE_INSTRUMENT_FK_NAME + " WHERE i." + INSTRUMENT_PK_COLUMN_NAME + " = ?"
+        );
     }
 
 }

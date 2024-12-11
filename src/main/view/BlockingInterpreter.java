@@ -59,7 +59,16 @@ public class BlockingInterpreter {
                         ctrl.terminateRental(cmdLine.getParameter(0));
                         break;
                     case RENT:
-                        boolean succesfulRental = ctrl.rentInstrument(cmdLine.getParameter(0), cmdLine.getParameter(1));
+                        String studentId = cmdLine.getParameter(0);
+                        String instrumentId = cmdLine.getParameter(1);
+
+                        boolean isAvailable = ctrl.isIntrumentAvailable(instrumentId);
+                        boolean succesfulRental = ctrl.rentInstrument(studentId, instrumentId);
+
+                        if(!isAvailable) {
+                            System.out.println("The specified instrument is not available!");
+                            break;
+                        }
 
                         if(succesfulRental) {
                             System.out.println("Rental was succesful!");

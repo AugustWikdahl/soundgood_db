@@ -22,6 +22,16 @@ public class Controller {
         return soundgoodDb.findAvailableInstruments(instrumentType);
     }
 
+
+    public boolean isIntrumentAvailable (String instrumentId) throws DBException {
+        Instrument instrument = soundgoodDb.isInstrumentAvailable(Integer.parseInt(instrumentId));
+        if (instrument.isAvailable()) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
     // TODO:
     public boolean rentInstrument (String studentId, String instrumentId) throws DBException{
         StudentDTO student = soundgoodDb.findStudentById(Integer.parseInt(studentId));
