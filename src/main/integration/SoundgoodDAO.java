@@ -2,11 +2,12 @@ package main.integration;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 import main.model.Instrument;
-import java.util.ArrayList;
 
 public class SoundgoodDAO {
     private static final String INSTRUMENT_TABLE_NAME = "instrument";
@@ -27,6 +28,8 @@ public class SoundgoodDAO {
     private static final String STUDENT_TABLE_NAME = "student";
     private static final String STUDENT_NAME_COLUMN_NAME = "name";
 
+    private PreparedStatement findAllInstrumentsStmt;
+
 
 
     private Connection connection;
@@ -37,6 +40,7 @@ public class SoundgoodDAO {
     public SoundgoodDAO() throws DBException {
         try {
             connectToSoundgoodDB();
+            prepareStatements();
         } catch (ClassNotFoundException | SQLException exception) {
             System.out.println("failed");
             throw new DBException("Could not connect to datasource.", exception);
@@ -99,5 +103,8 @@ public class SoundgoodDAO {
         return instruments;
     }
 
+    private void prepareStatements() {
+
+    }
 
 }

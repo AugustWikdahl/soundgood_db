@@ -88,7 +88,7 @@ VALUES (1,2, '12 months', '2024-11-21');
 
 INSERT INTO "instrument_lease" ("student_id", "instrument_id", "start_date", "lease_rules", "is_terminated") VALUES 
 (1, 1, '2024-11-21', 1, FALSE),
-(1, 2, '2024-11-21', 1, FALSE),
+(1, 2, '2024-11-21', 1, FALSE), 
 (2, 3, '2024-11-21', 1, FALSE),
 (2, 4, '2024-11-21', 1, FALSE),
 (3, 20, '2024-11-22', 1, FALSE),
