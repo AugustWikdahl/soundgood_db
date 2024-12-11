@@ -2,9 +2,8 @@ package main.integration;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
-import java.sql.SQLException;
 import java.sql.ResultSet;
-import java.sql.DriverManager;
+import java.sql.SQLException;
 
 public class SoundgoodDAO {
     private static final String INSTRUMENT_TABLE_NAME = "instrument";
@@ -67,7 +66,11 @@ public class SoundgoodDAO {
         }
     }
 
-    private void closeResultSet(String failureMsg, ResultSet result) throws DBExcepiton {
+
+    /*
+     * Function to close result set. Taken from Jdbc-bank project written by Leif Lindbäck 2020.
+     */
+    private void closeResultSet(String failureMsg, ResultSet result) throws DBException {
         try {
             result.close();
         } catch (Exception e) {
@@ -75,5 +78,5 @@ public class SoundgoodDAO {
         }  
     }
 
-    
+
 }
