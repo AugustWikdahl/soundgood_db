@@ -59,7 +59,13 @@ public class BlockingInterpreter {
                         ctrl.terminateRental(cmdLine.getParameter(0));
                         break;
                     case RENT:
-                        ctrl.rentInstrument(cmdLine.getParameter(0), cmdLine.getParameter(1));
+                        boolean succesfulRental = ctrl.rentInstrument(cmdLine.getParameter(0), cmdLine.getParameter(1));
+
+                        if(succesfulRental) {
+                            System.out.println("Rental was succesful!");
+                        } else {
+                            System.out.println("Student already has 2 ongoing rentals, cant rent more than 2 instruments!");
+                        }
                         break;
                     default:
                         System.out.println("illegal command");

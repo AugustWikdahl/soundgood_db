@@ -24,7 +24,7 @@ public class Controller {
 
     // TODO:
     public boolean rentInstrument (String studentId, String instrumentId) throws DBException{
-        StudentDTO student = soundgoodDb.findStudentById(studentId);
+        StudentDTO student = soundgoodDb.findStudentById(Integer.parseInt(studentId));
         if (student.canRentMore()) {
             soundgoodDb.rentInstrument(Integer.parseInt(studentId), Integer.parseInt(instrumentId));
             return true;
