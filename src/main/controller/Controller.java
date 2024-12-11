@@ -20,13 +20,12 @@ public class Controller {
     }
 
     public List<Instrument> getAvailableInstrumentsOfType (String instrumentType) throws DBException {
-        System.out.println("Controller has instrument string: " + instrumentType);
         return soundgoodDb.findAvailableInstruments(instrumentType);
     }
 
     // TODO:
     public void rentInstrument (String studentId, String instrumentId) {
-
+        soundgoodDb.rentInstrument(Integer.parseInt(studentId), Integer.parseInt(instrumentId));
     }
 
     // TODO:
