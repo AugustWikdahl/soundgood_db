@@ -4,6 +4,7 @@ import java.util.List;
 import main.integration.DBException;
 import main.integration.SoundgoodDAO;
 import main.model.Instrument;
+import main.model.StudentDTO;
 
 public class Controller {
     private final SoundgoodDAO soundgoodDb;
@@ -22,8 +23,14 @@ public class Controller {
     }
 
     // TODO:
-    public void rentInstrument (String studentId, String instrumentId) throws DBException{
-        soundgoodDb.rentInstrument(Integer.parseInt(studentId), Integer.parseInt(instrumentId));
+    public boolean rentInstrument (String studentId, String instrumentId) throws DBException{
+        StudentDTO student = soundgoodDb.findStudentById(studentId);
+        if (student.canRentMore()) {
+            soundgoodDb.rentInstrument(Integer.parseInt(studentId), Integer.parseInt(instrumentId));
+            return true;
+        } else {
+            return false;
+        }
     }
 
     // TODO:
