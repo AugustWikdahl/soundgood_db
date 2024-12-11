@@ -1,11 +1,7 @@
 package main.view;
 
-import java.util.List;
 import java.util.Scanner;
-
-// TODO: Here our imports go
 import main.controller.Controller;
-import main.view.Command;
 
 /**
  * Reads and interprets user commands. This command interpreter is blocking, the user

@@ -49,7 +49,7 @@ public class SoundgoodDAO {
 
     private void connectToSoundgoodDB() throws ClassNotFoundException, SQLException {
         connection = DriverManager.getConnection("jdbc:postgresql://localhost:5432/soundgood",
-                "postgres", "!Kaninjakt1975");
+                "postgres", "Hjrntvtt97");
 
         connection.setAutoCommit(false);
     }
@@ -86,15 +86,15 @@ public class SoundgoodDAO {
     }
 
     /*
-     * @Param Input string that 
+     * @Param Input string that specifies instrument type to be listed
+     * @return list of instruments available
      */
     public List<Instrument> findAvailableInstruments(String instrumentType) throws DBException {
-        System.out.println("DAO has instrument: " + instrumentType);
         String failureMsg = "Could not find available instruments";
         List<Instrument> instruments = new ArrayList<>();
         try {
             findAllInstrumentsStmt.setString(1, instrumentType);
-            ResultSet result = findAllInstrumentsStmt.executeQuery(instrumentType);
+            ResultSet result = findAllInstrumentsStmt.executeQuery();
             while (result.next()) {
                 instruments.add(new Instrument(result.getInt(INSTRUMENT_PK_COLUMN_NAME),
                     instrumentType, 
@@ -107,6 +107,11 @@ public class SoundgoodDAO {
             handleException(failureMsg, sqle);
         }
         return instruments;
+    }
+
+
+    public void getAllStudents() throws DBException{
+        
     }
 
     private void prepareStatements() throws SQLException {
