@@ -5,9 +5,11 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import main.model.Instrument;
+import main.model.StudentDTO;
 
 public class SoundgoodDAO {
     private static final String INSTRUMENT_TABLE_NAME = "instrument";
@@ -27,8 +29,11 @@ public class SoundgoodDAO {
 
     private static final String STUDENT_TABLE_NAME = "student";
     private static final String STUDENT_NAME_COLUMN_NAME = "name";
+    private static final String STUDENT_PK_COLUMN_NAME = "id";
 
     private PreparedStatement findAllInstrumentsStmt;
+    private PreparedStatement findStudentByIdStmt;
+    private PreparedStatement rentInstrumentStmt;
 
 
 
@@ -92,9 +97,10 @@ public class SoundgoodDAO {
     public List<Instrument> findAvailableInstruments(String instrumentType) throws DBException {
         String failureMsg = "Could not find available instruments";
         List<Instrument> instruments = new ArrayList<>();
+        ResultSet result = null;
         try {
             findAllInstrumentsStmt.setString(1, instrumentType);
-            ResultSet result = findAllInstrumentsStmt.executeQuery();
+            result = findAllInstrumentsStmt.executeQuery();
             while (result.next()) {
                 instruments.add(new Instrument(result.getInt(INSTRUMENT_PK_COLUMN_NAME),
                     instrumentType, 
@@ -105,13 +111,58 @@ public class SoundgoodDAO {
             connection.commit();
         } catch (SQLException sqle) {
             handleException(failureMsg, sqle);
+        } finally {
+            closeResultSet(failureMsg, result);
         }
         return instruments;
     }
 
 
-    public void getAllStudents() throws DBException{
-        
+    /*
+     * @param
+     * @return a list of all students in the database
+     */
+    public List<StudentDTO> findStudentById(String studentId) throws DBException{
+        String failureMsg = "Failed to get all students";
+        List<StudentDTO> students = new ArrayList<>();
+        ResultSet result = null;
+        try {
+            findStudentByIdStmt.setString(1, studentId);
+            result = findStudentByIdStmt.executeQuery();
+            while (result.next()) {
+                students.add(new StudentDTO(
+                    result.getString(STUDENT_NAME_COLUMN_NAME),
+                    result.getInt(STUDENT_PK_COLUMN_NAME), 
+                    result.getInt("lease_count")
+                ));
+            }
+            connection.commit();
+        } catch (SQLException sqle) {
+            handleException(failureMsg, sqle);
+        } finally {
+            closeResultSet(failureMsg, result);
+        }
+        return students;
+    }  
+
+    public void rentInstrument(int studentId, int instrumentId) throws DBException {
+        String failureMsg = "Failed to rent specified instrument for student";
+        int updatedRows = 0;
+        try {
+            rentInstrumentStmt.setInt(1, studentId);
+            rentInstrumentStmt.setInt(2, instrumentId);
+            rentInstrumentStmt.setString(3, LocalDate.now().toString());
+            rentInstrumentStmt.setInt(4, 1);
+            rentInstrumentStmt.setBoolean(5, false);
+            updatedRows = rentInstrumentStmt.executeUpdate();
+            if (updatedRows != 1) {
+                handleException(failureMsg, null);
+            }
+
+            connection.commit();
+        } catch (SQLException sqle){
+            handleException(failureMsg, sqle);
+        } 
     }
 
     private void prepareStatements() throws SQLException {
@@ -125,6 +176,27 @@ public class SoundgoodDAO {
             + "WHERE it." + TYPE_NAME_COLUMN_NAME + " = ? " 
             + "AND (il." + LEASE_TERMINATED_COLUMN_NAME + " = TRUE OR il." + LEASE_INSTRUMENT_FK_NAME + " IS NULL)"
         );
+
+        findStudentByIdStmt = connection.prepareStatement(
+            "SELECT s." + STUDENT_NAME_COLUMN_NAME + ", "
+             + "s." + STUDENT_PK_COLUMN_NAME + ", "
+             + "COUNT(il." + LEASE_STUDENT_FK_NAME + ") AS lease_count "
+            + "FROM " + STUDENT_TABLE_NAME + " AS s "
+            + "LEFT JOIN " + LEASE_TABLE_NAME + " AS il "
+            + "ON s." + STUDENT_PK_COLUMN_NAME + " = il." + LEASE_STUDENT_FK_NAME + " "
+            + "WHERE s." + STUDENT_PK_COLUMN_NAME + " = ? "
+            + "GROUP BY s." + STUDENT_PK_COLUMN_NAME + ", s." + STUDENT_NAME_COLUMN_NAME
+            );
+
+        rentInstrumentStmt = connection.prepareStatement("INSERT INTO " + LEASE_TABLE_NAME + "(" + LEASE_STUDENT_FK_NAME + ", " + 
+            LEASE_INSTRUMENT_FK_NAME + ", start_date, lease_rules, " + LEASE_TERMINATED_COLUMN_NAME + ") VALUES (?, ?, ?, ?, ?)");
+
+
+
+        /*
+         * INSERT INTO "instrument_lease" ("student_id", "instrument_id", "start_date", "lease_rules", "is_terminated") VALUES 
+(1, 1, '2024-11-21', 1, FALSE),
+         */
     }
 
 }
