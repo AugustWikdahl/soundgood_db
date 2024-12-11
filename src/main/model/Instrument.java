@@ -42,5 +42,10 @@ public class Instrument implements InstrumentDTO{
         return brand;
     }
 
+    @Override
+    public String toString() {
+        return "Type: " + this.getType() + " Brand: " + this.getBrand() + " ID: " + this.getInstrumentId();
+    }
+
 
 }
