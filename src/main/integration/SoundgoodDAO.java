@@ -85,10 +85,15 @@ public class SoundgoodDAO {
         }  
     }
 
+    /*
+     * @Param Input string that 
+     */
     public List<Instrument> findAvailableInstruments(String instrumentType) throws DBException {
         String failureMsg = "Could not find available instruments";
         List<Instrument> instruments = new ArrayList<>();
-        try (ResultSet result = findAllInstrumentsStmt.executeQuery()) {
+        try {
+            findAllInstrumentsStmt.setString(1, instrumentType);
+            ResultSet result = findAllInstrumentsStmt.executeQuery(instrumentType);
             while (result.next()) {
                 instruments.add(new Instrument(result.getInt(INSTRUMENT_PK_COLUMN_NAME),
                     instrumentType, 
@@ -103,8 +108,17 @@ public class SoundgoodDAO {
         return instruments;
     }
 
-    private void prepareStatements() {
-
+    private void prepareStatements() throws SQLException {
+        findAllInstrumentsStmt = connection.prepareStatement(
+            "SELECT i." + INSTRUMENT_PK_COLUMN_NAME + ", " 
+            + "i." + INSTRUMENT_PRICE_COLUMN_NAME + ", "
+            + "i." + INSTRUMENT_BRAND_COLUMN_NAME + " "
+            + "FROM " + INSTRUMENT_TABLE_NAME + " i "
+            + "JOIN " + TYPE_TABLE_NAME + " it ON i." + INSTRUMENT_TYPE_FK_NAME + " = it." + TYPE_PK_COLUMN_NAME + " "
+            + "LEFT JOIN " + LEASE_TABLE_NAME + " il ON i." + INSTRUMENT_PK_COLUMN_NAME + " = il." + LEASE_INSTRUMENT_FK_NAME + " "
+            + "WHERE it." + TYPE_NAME_COLUMN_NAME + " = ? " 
+            + "AND (il." + LEASE_TERMINATED_COLUMN_NAME + " = TRUE OR il." + LEASE_INSTRUMENT_FK_NAME + " IS NULL)"
+        );
     }
 
 }
