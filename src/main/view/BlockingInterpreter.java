@@ -53,7 +53,7 @@ public class BlockingInterpreter {
                         keepReceivingCmds = false;
                         break;
                     case LIST:
-                        ctrl.getAvailableInstrumentsOfType(cmdLine.getParameter(0));
+                        System.out.println(ctrl.getAvailableInstrumentsOfType(cmdLine.getParameter(0)));
                         break;
                     case TERMINATE:
                         ctrl.terminateRental(cmdLine.getParameter(0));
