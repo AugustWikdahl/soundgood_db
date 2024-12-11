@@ -6,7 +6,6 @@ import java.util.List;
 
 import main.integration.DBException;
 import main.model.Instrument;
-import main.model.InstrumentDTO;
 
 public class Controller {
     private final SoundgoodDAO soundgoodDb;
@@ -20,15 +19,17 @@ public class Controller {
         this.soundgoodDb = new SoundgoodDAO();
     }
 
-    public List<Instrument> getAvailableInstrumentsOfType (String instrumentType) {
-        try {
-            soundgoodDb.findAvailableInstruments(instrumentType);
-        } catch (DBException e) {
-            System.out.println("Fuck yourself");
-        }
+    public List<Instrument> getAvailableInstrumentsOfType (String instrumentType) throws DBException {
+        return soundgoodDb.findAvailableInstruments(instrumentType);
     }
 
+    // TODO:
     public void rentInstrument (String studentId, String instrumentId) {
+
+    }
+
+    // TODO:
+    public void terminateRental (String leaseId) {
 
     }
 
