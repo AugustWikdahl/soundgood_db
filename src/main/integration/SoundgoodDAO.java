@@ -4,6 +4,9 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.List;
+import main.model.Instrument;
+import java.util.ArrayList;
 
 public class SoundgoodDAO {
     private static final String INSTRUMENT_TABLE_NAME = "instrument";
@@ -76,6 +79,24 @@ public class SoundgoodDAO {
         } catch (Exception e) {
             throw new DBException(failureMsg + " Could not close result set.", e);
         }  
+    }
+
+    public List<Instrument> findAvailableInstruments(String instrumentType) throws DBException {
+        String failureMsg = "Could not find available instruments";
+        List<Instrument> instruments = new ArrayList<>();
+        try (ResultSet result = findAllInstrumentsStmt.executeQuery()) {
+            while (result.next()) {
+                instruments.add(new Instrument(result.getInt(INSTRUMENT_PK_COLUMN_NAME),
+                    instrumentType, 
+                    result.getDouble(INSTRUMENT_PRICE_COLUMN_NAME),
+                    result.getString(INSTRUMENT_BRAND_COLUMN_NAME)
+                ));
+            }
+            connection.commit();
+        } catch (SQLException sqle) {
+            handleException(failureMsg, sqle);
+        }
+        return instruments;
     }
 
 
