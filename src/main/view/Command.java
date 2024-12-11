@@ -29,29 +29,17 @@
   */
  public enum Command {
      /**
-      * Creates a new account.
-      */
-     NEW,
-     /**
-      * Lists all existing accounts.
+      * Lists all available instruments of specified type.
       */
      LIST,
      /**
-      * Deletes the specified account.
+      * Rents an instrument connected to the studentId and instrumnentId given.
       */
-     DELETE,
+     RENT,
      /**
-      * Deposits the specified amount to the specified account
+      * Terminates the specified.
       */
-     DEPOSIT,
-     /**
-      * Withdraws the specified amount from the specified account
-      */
-     WITHDRAW,
-     /**
-      * Lists the balance of the specified account.
-      */
-     BALANCE,
+     TERMINATE,
      /**
       * Lists all commands.
       */

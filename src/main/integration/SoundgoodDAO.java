@@ -49,7 +49,7 @@ public class SoundgoodDAO {
 
     private void connectToSoundgoodDB() throws ClassNotFoundException, SQLException {
         connection = DriverManager.getConnection("jdbc:postgresql://localhost:5432/soundgood",
-                "postgres", "Hjrntvtt97");
+                "postgres", "!Kaninjakt1975");
 
         connection.setAutoCommit(false);
     }
@@ -89,6 +89,7 @@ public class SoundgoodDAO {
      * @Param Input string that 
      */
     public List<Instrument> findAvailableInstruments(String instrumentType) throws DBException {
+        System.out.println("DAO has instrument: " + instrumentType);
         String failureMsg = "Could not find available instruments";
         List<Instrument> instruments = new ArrayList<>();
         try {
