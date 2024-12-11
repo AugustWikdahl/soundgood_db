@@ -35,6 +35,7 @@ public class SoundgoodDAO {
     private PreparedStatement findAllInstrumentsStmt;
     private PreparedStatement findStudentByIdStmt;
     private PreparedStatement rentInstrumentStmt;
+    private PreparedStatement terminateRentalStmt;
 
 
 
@@ -84,11 +85,13 @@ public class SoundgoodDAO {
      * Function to close result set. Taken from Jdbc-bank project written by Leif Lindbäck 2020.
      */
     private void closeResultSet(String failureMsg, ResultSet result) throws DBException {
-        try {
-            result.close();
-        } catch (Exception e) {
-            throw new DBException(failureMsg + " Could not close result set.", e);
-        }  
+        if (result != null) { // Ensure result is not null before attempting to close
+            try {
+                result.close();
+            } catch (SQLException e) { // Handle SQLException specifically
+                throw new DBException(failureMsg + " Could not close result set.", e);
+            }
+        }
     }
 
     /*
@@ -123,14 +126,14 @@ public class SoundgoodDAO {
      * @param
      * @return a list of all students in the database
      */
-    public StudentDTO findStudentById(String studentId) throws DBException{
-        String failureMsg = "Failed to get all students";
+    public StudentDTO findStudentById(int studentId) throws DBException{
+        String failureMsg = "Failed to get student with id: " + studentId;
         StudentDTO student = null;
         ResultSet result = null;
         try {
-            findStudentByIdStmt.setString(1, studentId);
+            findStudentByIdStmt.setInt(1, studentId);
             result = findStudentByIdStmt.executeQuery();
-            while (result.next()) {
+            if (result.next()) {
                 student = (new StudentDTO(
                     result.getString(STUDENT_NAME_COLUMN_NAME),
                     result.getInt(STUDENT_PK_COLUMN_NAME), 
@@ -192,12 +195,7 @@ public class SoundgoodDAO {
         rentInstrumentStmt = connection.prepareStatement("INSERT INTO " + LEASE_TABLE_NAME + "(" + LEASE_STUDENT_FK_NAME + ", " + 
             LEASE_INSTRUMENT_FK_NAME + ", start_date, lease_rules, " + LEASE_TERMINATED_COLUMN_NAME + ") VALUES (?, ?, ?, ?, ?)");
 
-
-
-        /*
-         * INSERT INTO "instrument_lease" ("student_id", "instrument_id", "start_date", "lease_rules", "is_terminated") VALUES 
-(1, 1, '2024-11-21', 1, FALSE),
-         */
+       
     }
 
 }
