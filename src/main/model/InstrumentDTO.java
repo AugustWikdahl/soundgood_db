@@ -1,5 +1,8 @@
 package main.model;
 
+/*
+ * A interface with the getters from the instrument class.
+ */
 public interface InstrumentDTO {
     /**
      * @return The unique instrument identifier.
