@@ -57,7 +57,7 @@ public class SoundgoodDAO {
 
     private void connectToSoundgoodDB() throws ClassNotFoundException, SQLException {
         connection = DriverManager.getConnection("jdbc:postgresql://localhost:5432/soundgood",
-                "postgres", "Hjrntvtt97");
+                "postgres", "***");
 
         connection.setAutoCommit(false);
     }
@@ -155,7 +155,7 @@ public class SoundgoodDAO {
      * 
      * @throws DBException if database cant find the instrument.
      */
-    public Instrument isInstrumentAvailable(int instrumentId) throws DBException{
+    public Instrument readInstrumentAvailable(int instrumentId) throws DBException{
         String failureMsg = "Failed to find instrument by id: " + instrumentId;
         Instrument instrument = null;
         ResultSet result = null;
@@ -177,7 +177,7 @@ public class SoundgoodDAO {
     /*
      * 
      */
-    public void rentInstrument(int studentId, int instrumentId) throws DBException {
+    public void updateRentInstrument(int studentId, int instrumentId) throws DBException {
         String failureMsg = "Failed to rent specified instrument for student";
         int updatedRows = 0;
         try {
@@ -197,7 +197,7 @@ public class SoundgoodDAO {
         } 
     }
 
-    public void terminateRental(int rentalId) throws DBException {
+    public void updateTerminateRental(int rentalId) throws DBException {
         String failureMsg = "Failed to terminate rental";
         int updatedRows = 0;
         try {
