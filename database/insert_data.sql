@@ -36,7 +36,7 @@ VALUES (1,'Zorita Bell','247418879353','(654) 343-1470','854-1440 Ut, Rd.','nibh
 
 INSERT INTO "instrument_type" ("id","quantity","name")
 VALUES (1,10,'guitar'),
- (2,10,'base'),
+ (2,10,'bass'),
  (3,10,'saxophone'),
  (4,10,'violin');
 

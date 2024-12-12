@@ -10,7 +10,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import main.model.Instrument;
-import main.model.StudentDTO;
+import main.model.Student;
 
 public class SoundgoodDAO {
     private static final String INSTRUMENT_TABLE_NAME = "instrument";
@@ -99,7 +99,7 @@ public class SoundgoodDAO {
      * @Param Input string that specifies instrument type to be listed
      * @return list of instruments available
      */
-    public List<Instrument> findAvailableInstruments(String instrumentType) throws DBException {
+    public List<Instrument> readAvailableInstruments(String instrumentType) throws DBException {
         String failureMsg = "Could not find available instruments";
         List<Instrument> instruments = new ArrayList<>();
         ResultSet result = null;
@@ -127,15 +127,15 @@ public class SoundgoodDAO {
      * @param int studentId, the id to search student by
      * @return a studentDTO from the database
      */
-    public StudentDTO findStudentById(int studentId) throws DBException{
+    public Student readStudentById(int studentId) throws DBException{
         String failureMsg = "Failed to get student with id: " + studentId;
-        StudentDTO student = null;
+        Student student = null;
         ResultSet result = null;
         try {
             findStudentByIdStmt.setInt(1, studentId);
             result = findStudentByIdStmt.executeQuery();
             if (result.next()) {
-                student = (new StudentDTO(
+                student = (new Student(
                     result.getString(STUDENT_NAME_COLUMN_NAME),
                     result.getInt(STUDENT_PK_COLUMN_NAME), 
                     result.getInt("lease_count")
@@ -150,6 +150,11 @@ public class SoundgoodDAO {
         return student;
     }  
 
+    /*
+     * Method to check if instrument is available. Returns instrument object
+     * 
+     * @throws DBException if database cant find the instrument.
+     */
     public Instrument isInstrumentAvailable(int instrumentId) throws DBException{
         String failureMsg = "Failed to find instrument by id: " + instrumentId;
         Instrument instrument = null;
@@ -169,6 +174,9 @@ public class SoundgoodDAO {
         return instrument;
     }
 
+    /*
+     * 
+     */
     public void rentInstrument(int studentId, int instrumentId) throws DBException {
         String failureMsg = "Failed to rent specified instrument for student";
         int updatedRows = 0;
@@ -188,6 +196,22 @@ public class SoundgoodDAO {
             handleException(failureMsg, sqle);
         } 
     }
+
+    public void terminateRental(int rentalId) throws DBException {
+        String failureMsg = "Failed to terminate rental";
+        int updatedRows = 0;
+        try {
+            terminateRentalStmt.setInt(1, rentalId);
+            updatedRows = terminateRentalStmt.executeUpdate();
+            if (updatedRows != 1) {
+                handleException(failureMsg, null);
+            }
+
+        } catch (SQLException sqle) {
+            handleException(failureMsg, sqle);
+        }
+    }
+
 
     private void prepareStatements() throws SQLException {
         findAllInstrumentsStmt = connection.prepareStatement(
@@ -221,6 +245,8 @@ public class SoundgoodDAO {
             " AS i LEFT JOIN " + LEASE_TABLE_NAME + " AS il ON i." + INSTRUMENT_PK_COLUMN_NAME + " = il." 
             + LEASE_INSTRUMENT_FK_NAME + " WHERE i." + INSTRUMENT_PK_COLUMN_NAME + " = ?"
         );
-    }
 
+        terminateRentalStmt = connection.prepareStatement("UPDATE " + LEASE_TABLE_NAME + " SET " + LEASE_TERMINATED_COLUMN_NAME
+            + "= TRUE WHERE " + INSTRUMENT_PK_COLUMN_NAME + " = ?");
+    }
 }

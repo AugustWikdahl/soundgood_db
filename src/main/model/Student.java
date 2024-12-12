@@ -1,6 +1,6 @@
 package main.model;
 
-public class StudentDTO {
+public class Student {
     private String name;
     private int id;
     private int noOfRentedInstruments;
@@ -9,7 +9,7 @@ public class StudentDTO {
      * Creates instance of StudentDTO
      * @param name, studentid
      */
-    public StudentDTO(String name, int studentId, int noOfRentedInstruments) {
+    public Student(String name, int studentId, int noOfRentedInstruments) {
         this.name = name;
         this.id = studentId;
         this.noOfRentedInstruments = noOfRentedInstruments;

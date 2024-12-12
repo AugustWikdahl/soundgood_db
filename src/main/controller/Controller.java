@@ -4,7 +4,7 @@ import java.util.List;
 import main.integration.DBException;
 import main.integration.SoundgoodDAO;
 import main.model.Instrument;
-import main.model.StudentDTO;
+import main.model.Student;
 
 public class Controller {
     private final SoundgoodDAO soundgoodDb;
@@ -18,13 +18,23 @@ public class Controller {
         this.soundgoodDb = new SoundgoodDAO();
     }
 
+    /*
+     * Public method to list all free instruments to rent of a specified type
+     * 
+     * @throws BankDBException If unable to read the instruments.
+     */
     public List<Instrument> getAvailableInstrumentsOfType (String instrumentType) throws DBException {
-        return soundgoodDb.findAvailableInstruments(instrumentType);
+        return soundgoodDb.readAvailableInstruments(instrumentType);
     }
 
 
+    /*
+     * Public method to check if instrument is available with specified instrument id
+     * 
+     * @throws BankDBException If unable to find the specified instrument.
+     */
     public boolean isIntrumentAvailable (String instrumentId) throws DBException {
-        Instrument instrument = soundgoodDb.isInstrumentAvailable(Integer.parseInt(instrumentId));
+        Instrument instrument = soundgoodDb.readInstrumentAvailable(Integer.parseInt(instrumentId));
         if (instrument.isAvailable()) {
             return true;
         } else {
@@ -32,20 +42,28 @@ public class Controller {
         }
     }
 
-    // TODO:
+    /*
+     * Public method to rent an instrument 
+     * 
+     * @throws BankDBException If inserting rental in database fails.
+     */
     public boolean rentInstrument (String studentId, String instrumentId) throws DBException{
-        StudentDTO student = soundgoodDb.findStudentById(Integer.parseInt(studentId));
+        Student student = soundgoodDb.readStudentById(Integer.parseInt(studentId));
         if (student.canRentMore()) {
-            soundgoodDb.rentInstrument(Integer.parseInt(studentId), Integer.parseInt(instrumentId));
+            soundgoodDb.updateRentInstrument(Integer.parseInt(studentId), Integer.parseInt(instrumentId));
             return true;
         } else {
             return false;
         }
     }
 
-    // TODO:
-    public void terminateRental (String leaseId) {
-
+    /*
+     * Public method to terminate rental
+     * 
+     * @throws BankDBException If fails to update database.
+     */
+    public void terminateRental (String leaseId) throws DBException{
+        soundgoodDb.updateTerminateRental(Integer.parseInt(leaseId));
     }
 
 }
