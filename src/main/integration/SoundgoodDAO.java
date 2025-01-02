@@ -37,6 +37,8 @@ public class SoundgoodDAO {
     private PreparedStatement rentInstrumentStmt;
     private PreparedStatement findInstrumentByIDStmt;
     private PreparedStatement terminateRentalStmt;
+    private PreparedStatement lockStudentForUpdate;
+    private PreparedStatement lockInstrumentForUpdate;
 
 
 
@@ -57,7 +59,7 @@ public class SoundgoodDAO {
 
     private void connectToSoundgoodDB() throws ClassNotFoundException, SQLException {
         connection = DriverManager.getConnection("jdbc:postgresql://localhost:5432/soundgood",
-                "postgres", "");
+                "postgres", "Hjrntvtt97");
 
         connection.setAutoCommit(false);
     }
@@ -78,6 +80,19 @@ public class SoundgoodDAO {
             throw new DBException(failureMsg, cause);
         } else {
             throw new DBException(failureMsg);
+        }
+    }
+
+     /**
+     * Commits the current transaction.
+     * 
+     * @throws DBException If unable to commit the current transaction. Written by Leif Lindbäck 2020.
+     */
+    public void commit() throws DBException {
+        try {
+            connection.commit();
+        } catch (SQLException e) {
+            handleException("Failed to commit", e);
         }
     }
 
@@ -113,7 +128,6 @@ public class SoundgoodDAO {
                     result.getString(INSTRUMENT_BRAND_COLUMN_NAME)
                 ));
             }
-            connection.commit();
         } catch (SQLException sqle) {
             handleException(failureMsg, sqle);
         } finally {
@@ -133,6 +147,8 @@ public class SoundgoodDAO {
         ResultSet result = null;
         try {
             findStudentByIdStmt.setInt(1, studentId);
+            lockStudentForUpdate.setInt(1, studentId);
+            result = lockStudentForUpdate.executeQuery();
             result = findStudentByIdStmt.executeQuery();
             if (result.next()) {
                 student = (new Student(
@@ -141,7 +157,7 @@ public class SoundgoodDAO {
                     result.getInt("lease_count")
                 ));
             }
-            connection.commit();
+
         } catch (SQLException sqle) {
             handleException(failureMsg, sqle);
         } finally {
@@ -155,17 +171,18 @@ public class SoundgoodDAO {
      * 
      * @throws DBException if database cant find the instrument.
      */
-    public Instrument readInstrumentAvailable(int instrumentId) throws DBException{
+    public Instrument readInstrumentById(int instrumentId) throws DBException{
         String failureMsg = "Failed to find instrument by id: " + instrumentId;
         Instrument instrument = null;
         ResultSet result = null;
         try {
             findInstrumentByIDStmt.setInt(1, instrumentId);
+            lockInstrumentForUpdate.setInt(1, instrumentId);
+            result = lockInstrumentForUpdate.executeQuery();
             result = findInstrumentByIDStmt.executeQuery();
             if (result.next()) {
                 instrument = new Instrument(instrumentId, result.getBoolean("is_available"));
             }
-            connection.commit();
         } catch (SQLException sqle) {
             handleException(failureMsg, sqle);
         } finally {
@@ -180,6 +197,7 @@ public class SoundgoodDAO {
     public void createNewRental(int studentId, int instrumentId) throws DBException {
         String failureMsg = "Failed to rent specified instrument for student";
         int updatedRows = 0;
+
         try {
             rentInstrumentStmt.setInt(1, studentId);
             rentInstrumentStmt.setInt(2, instrumentId);
@@ -243,8 +261,12 @@ public class SoundgoodDAO {
             ", CASE WHEN il." + LEASE_INSTRUMENT_FK_NAME + " IS NULL OR il." + LEASE_TERMINATED_COLUMN_NAME
             + " =  TRUE THEN TRUE ELSE FALSE END AS is_available FROM " + INSTRUMENT_TABLE_NAME + 
             " AS i LEFT JOIN " + LEASE_TABLE_NAME + " AS il ON i." + INSTRUMENT_PK_COLUMN_NAME + " = il." 
-            + LEASE_INSTRUMENT_FK_NAME + " WHERE i." + INSTRUMENT_PK_COLUMN_NAME + " = ?"
+            + LEASE_INSTRUMENT_FK_NAME + " WHERE i." + INSTRUMENT_PK_COLUMN_NAME + " = ? "
         );
+
+        lockInstrumentForUpdate = connection.prepareStatement("SELECT * FROM " + INSTRUMENT_TABLE_NAME + " WHERE id = ? FOR UPDATE");
+
+        lockStudentForUpdate = connection.prepareStatement("SELECT * FROM " + STUDENT_TABLE_NAME + " WHERE id = ? FOR UPDATE");
 
         terminateRentalStmt = connection.prepareStatement("UPDATE " + LEASE_TABLE_NAME + " SET " + LEASE_TERMINATED_COLUMN_NAME
             + "= TRUE WHERE " + INSTRUMENT_PK_COLUMN_NAME + " = ?");

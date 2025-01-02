@@ -62,18 +62,12 @@ public class BlockingInterpreter {
                         String studentId = cmdLine.getParameter(0);
                         String instrumentId = cmdLine.getParameter(1);
 
-                        boolean isAvailable = ctrl.isIntrumentAvailable(instrumentId);
                         boolean succesfulRental = ctrl.rentInstrument(studentId, instrumentId);
-
-                        if(!isAvailable) {
-                            System.out.println("The specified instrument is not available!");
-                            break;
-                        }
 
                         if(succesfulRental) {
                             System.out.println("Rental was succesful!");
                         } else {
-                            System.out.println("Student already has 2 ongoing rentals, cant rent more than 2 instruments!");
+                            System.out.println("Rental failed!");
                         }
                         break;
                     default:

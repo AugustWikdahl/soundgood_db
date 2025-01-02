@@ -27,21 +27,6 @@ public class Controller {
         return soundgoodDb.readAvailableInstruments(instrumentType);
     }
 
-
-    /*
-     * Public method to check if instrument is available with specified instrument id
-     * 
-     * @throws BankDBException If unable to find the specified instrument.
-     */
-    public boolean isIntrumentAvailable (String instrumentId) throws DBException {
-        Instrument instrument = soundgoodDb.readInstrumentAvailable(Integer.parseInt(instrumentId));
-        if (instrument.isAvailable()) {
-            return true;
-        } else {
-            return false;
-        }
-    }
-
     /*
      * Public method to rent an instrument 
      * 
@@ -49,10 +34,13 @@ public class Controller {
      */
     public boolean rentInstrument (String studentId, String instrumentId) throws DBException{
         Student student = soundgoodDb.readStudentById(Integer.parseInt(studentId));
-        if (student.canRentMore()) {
-            soundgoodDb.updateRentInstrument(Integer.parseInt(studentId), Integer.parseInt(instrumentId));
+        Instrument instrument = soundgoodDb.readInstrumentById(Integer.parseInt(instrumentId));
+
+        if (student.canRentMore() && instrument.isAvailable()) {
+            soundgoodDb.createNewRental(Integer.parseInt(studentId), Integer.parseInt(instrumentId));
             return true;
         } else {
+            soundgoodDb.commit();
             return false;
         }
     }
@@ -63,7 +51,7 @@ public class Controller {
      * @throws BankDBException If fails to update database.
      */
     public void terminateRental (String leaseId) throws DBException{
-        soundgoodDb.updateTerminateRental(Integer.parseInt(leaseId));
+        soundgoodDb.updateRentalStatusEnded(Integer.parseInt(leaseId));
     }
 
 }
