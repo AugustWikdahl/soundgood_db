@@ -59,7 +59,7 @@ public class SoundgoodDAO {
 
     private void connectToSoundgoodDB() throws ClassNotFoundException, SQLException {
         connection = DriverManager.getConnection("jdbc:postgresql://localhost:5432/soundgood",
-                "postgres", "Hjrntvtt97");
+                "postgres", "1234");
 
         connection.setAutoCommit(false);
     }
